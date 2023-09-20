@@ -1,7 +1,31 @@
 import { FiVolume2 } from 'react-icons/fi'
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
+import { ChangeEvent, useState } from 'react'
 
 export default function Home(){
+    const [ email, setEmail ] = useState('');
+
+    const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value)
+    }
+
+    const subscribeUser = async () => {
+        const response = fetch('http://localhost:8000/subscribe/', {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({email})
+        })
+        const data = await (await response).json()
+        if (data.error) {
+            alert(data.error)
+        } else {
+            alert("You've successfully subscribed to emails from WordHaven!")
+        }
+        setEmail('')
+    }
+
     return (
         <div className='container-fluid' style={{padding: '40px'}}>
             <div className='container border border-primary rounded p-0' style={{maxWidth: '900px', width: '100%'}}>
@@ -18,8 +42,8 @@ export default function Home(){
                     </div>
                     <p className='mt-3'>Start each day with the Word of the Day in your inbox!</p>
                     <form className="form-inline" style={{width: '100%'}}>
-                        <input className="form-control mr-sm-2 flex-grow-1" type="search" placeholder="Email address" aria-label="Search"/>
-                        <button className="btn btn-outline-primary my-2 my-sm-0 d-flex align-items-center" style={{height: '38px'}} type="submit">Subscribe</button>
+                        <input value={email} onChange={handleInput} className="form-control mr-sm-2 flex-grow-1" type="search" placeholder="Email address" aria-label="Search"/>
+                        <button onClick={(e) => {e.preventDefault(); subscribeUser()}} className="btn btn-outline-primary my-2 my-sm-0 d-flex align-items-center" style={{height: '38px'}} type="submit">Subscribe</button>
                     </form>
                 </div>
             </div>
