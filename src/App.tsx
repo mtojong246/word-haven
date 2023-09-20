@@ -1,10 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Navbar from './routes/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import Home from './routes/Home';
 import SearchResults from './routes/SearchResults';
+import Login from './routes/Login';
+import Register from './routes/Register';
 
 function App() {
   return (
@@ -12,6 +12,8 @@ function App() {
       <Route path='/' element={<Navbar />}>
         <Route index element={<Home />} />
         <Route path='search/:word' element={<SearchResults />} />
+        <Route path='login' element={<Login />} />
+        <Route path='register' element={<Register />} />
       </Route>
     </Routes>
   );
