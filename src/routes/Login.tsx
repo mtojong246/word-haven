@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ChangeEvent, useState } from "react"
 import { useDispatch } from "react-redux"
 import { login } from "../slices/login"
 
 export default function Login() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [ credentials, setCredentials ] = useState({
         'username': '',
@@ -38,7 +39,7 @@ export default function Login() {
             alert(data.error)
         } else {
             dispatch(login(data))
-
+            navigate('/')
         }
     }
 

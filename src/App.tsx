@@ -5,6 +5,7 @@ import Home from './routes/Home';
 import SearchResults from './routes/SearchResults';
 import Login from './routes/Login';
 import Register from './routes/Register';
+import RegistrationSuccessful from './routes/RegistrationSuccessful';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='search/:word' element={<SearchResults />} />
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
+        <Route path='registration-successful' element={<RegistrationSuccessful />} />
       </Route>
     </Routes>
   );

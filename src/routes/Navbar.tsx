@@ -29,10 +29,8 @@ export default function Navbar() {
         await fetch('http://localhost:8000/logout/')
         dispatch(logout())
         alert("You've been logged out successfully")
-        navigate('/')
+        navigate('/login')
     }
-
-    console.log(user)
 
     return (
     <>
