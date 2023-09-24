@@ -6,6 +6,7 @@ import SearchResults from './routes/SearchResults';
 import Login from './routes/Login';
 import Register from './routes/Register';
 import RegistrationSuccessful from './routes/RegistrationSuccessful';
+import Unsubscribe from './routes/Unsubscribe';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
         <Route path='registration-successful' element={<RegistrationSuccessful />} />
+        <Route path='unsubscribe/:email' element={<Unsubscribe />} />
       </Route>
     </Routes>
   );

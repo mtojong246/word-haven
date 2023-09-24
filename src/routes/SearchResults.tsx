@@ -8,7 +8,6 @@ export default function SearchResults() {
     const word = useSelector(selectWord)
     const term = useParams();
 
-    console.log(word)
 
     return (
         <>
