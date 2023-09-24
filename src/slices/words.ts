@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface WordState {
     word: {
         meanings: [],
-        phonetic: {},
         origin: [],
     },
 }
@@ -11,7 +10,6 @@ export interface WordState {
 const initialState: WordState = {
     word: {
         meanings: [],
-        phonetic: {},
         origin: [],
     }
 }
