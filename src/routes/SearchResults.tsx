@@ -3,10 +3,77 @@ import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { selectWord } from '../selectors/word.selector'
 import { useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { selectUser } from '../selectors/user.selector'
 
 export default function SearchResults() {
     const word = useSelector(selectWord)
     const term = useParams();
+    const [ isFavorited, setIsFavorited ] = useState(false);
+    const user = useSelector(selectUser)
+
+    useEffect(() => {
+        const getWord = async () => {
+            const response = await fetch(`http://localhost:8000/favorites/${user?.username}/`);
+            const data = await response.json();
+            const word = data.find((d:any) => d.word === term.word)
+
+            if (word) {
+                setIsFavorited(true)
+            } else {
+                setIsFavorited(false)
+            }
+            
+        }
+        getWord()
+    }, [user?.username, term])
+
+
+    const addToFavorites = async (e:any) => {
+        e.preventDefault();
+        if (!isFavorited) {
+            try {
+                const response = await fetch(`http://localhost:8000/favorites/${user?.username}/`, {
+                    method: "POST",
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        word: term.word,
+                        meanings: JSON.stringify(word.meanings),
+                        origin: JSON.stringify(word.origin),
+                    })
+                })
+                await response.json();
+                setIsFavorited(true)
+            } catch (error:any) {
+                alert('Sorry, there was an error adding word to favorites')
+            }
+            
+        }
+    }
+
+    const deleteFromFavorites = async (e:any) => {
+        e.preventDefault()
+        if (isFavorited) {
+            try {
+                const response = await fetch(`http://localhost:8000/favorites/${user?.username}/`, {
+                    method: "DELETE",
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        word: term.word,
+                    })
+                })
+                await response.json();
+                setIsFavorited(false)
+            } catch (error:any) {
+                alert('Sorry, there was an error deleting word from favorites')
+            }
+        }
+    }
+
 
 
     return (
@@ -19,7 +86,8 @@ export default function SearchResults() {
                             <h2 className='m-0 fw-bold' style={{fontWeight: '600'}}>{term.word}</h2>
                             <p className='h5 m-0 pl-2'>[ he-loh ]</p>
                             <FiVolume2 className='ml-3' style={{height: '24px', width: '24px'}}/>
-                            <AiOutlineStar className='ml-2 mr-3' style={{height: '24px', width: '24px'}}/>
+                            {isFavorited ? <AiFillStar onClick={deleteFromFavorites} className='ml-2 mr-3' style={{height: '24px', width: '24px', cursor: 'pointer', color: '#007BFF'}}/> : <AiOutlineStar onClick={addToFavorites} className='ml-2 mr-3' style={{height: '24px', width: '24px', cursor: 'pointer', color: '#007BFF'}}/>}
+                            
                         </div>
                         {word.meanings.map((meaning:any) => (
                         <div className='pt-2'>

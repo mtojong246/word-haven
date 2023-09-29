@@ -44,7 +44,17 @@ export default function Navbar() {
             <Link to='/' style={{textDecoration: 'none'}}><p className='pl-3 h2 text-dark mb-0 position-relative z-1'>Word<span className='text-primary'>Haven</span></p></Link>
             <div className='d-flex position-relative z-1 pr-3'>
                 {user ? (
-                    <button onClick={(e) => {e.preventDefault(); logOut()}} style={{background: 'none', border: 'none'}}><p className='mb-0 h6 text-dark mr-2'>Logout</p></button>
+                    <>
+                    <div className="dropdown">
+                        <button style={{background: 'none'}} className="btn dropdown-toggle text-dark" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Profile
+                        </button>
+                        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                            <Link to={`/dashboard/${user.username}`} className="dropdown-item" >Dashboard</Link>
+                            <button onClick={(e) => {e.preventDefault(); logOut()}} style={{background: 'none', border: 'none', width: '100%'}}><p className='text-left mb-0 text-dark dropdown-item'>Logout</p></button>
+                        </div>
+                    </div>
+                    </>
                 ) : (
                     <>
                         <Link to='/register' style={{textDecoration: 'none'}}><p className='mb-0 h6 text-dark mr-4'>Register</p></Link>

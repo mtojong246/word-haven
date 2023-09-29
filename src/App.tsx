@@ -7,6 +7,7 @@ import Login from './routes/Login';
 import Register from './routes/Register';
 import RegistrationSuccessful from './routes/RegistrationSuccessful';
 import Unsubscribe from './routes/Unsubscribe';
+import Dashboard from './routes/Dashboard';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='register' element={<Register />} />
         <Route path='registration-successful' element={<RegistrationSuccessful />} />
         <Route path='unsubscribe/:email' element={<Unsubscribe />} />
+        <Route path='dashboard/:username' element={<Dashboard />} />
       </Route>
     </Routes>
   );

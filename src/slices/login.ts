@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface LoginState {
     user: {
         email: string;
-        firstName: string;
+        username: string;
     } | null
 }
 
