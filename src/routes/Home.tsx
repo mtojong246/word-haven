@@ -16,14 +16,14 @@ export default function Home(){
     }
 
     const subscribeUser = async () => {
-        const response = fetch('http://localhost:8000/subscribe/', {
+        const response = await fetch('http://localhost:8000/subscribe/', {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
             },
             body: JSON.stringify({email})
         })
-        const data = await (await response).json()
+        const data = await response.json()
         if (data.error) {
             alert(data.error)
         } else {
@@ -34,8 +34,8 @@ export default function Home(){
 
     useEffect(() => {
         const fetchWord = async () => {
-            const response = fetch('http://localhost:8000/word-of-the-day/');
-            const data = await (await response).json()
+            const response = await fetch('http://localhost:8000/word-of-the-day/');
+            const data = await response.json()
             setWordOfTheDay(data.word)
         }
         fetchWord()

@@ -11,6 +11,7 @@ export default function Dashboard() {
     const user = useSelector(selectUser);
     const [ favorites, setFavorites ] = useState([]);
     const [ word, setSelectedWord ] = useState('');
+    const [ isSubscribed, setIsSubscribed ] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -26,6 +27,20 @@ export default function Dashboard() {
         }
         getWords()
     }, [user?.username])
+
+    useEffect(() => {
+        const getEmails = async () => {
+            const response = await fetch('http://localhost:8000/emails/');
+            const data = await response.json();
+            if (data.includes(user?.email)) {
+                setIsSubscribed(true)
+            } else {
+                setIsSubscribed(false)
+            }
+            
+        }
+        getEmails()
+    }, [user?.email])
 
     const deleteFromFavorites = async (e:any) => {
         e.preventDefault()
@@ -56,6 +71,28 @@ export default function Dashboard() {
         const data = await response.json()
         dispatch(setWord(data))
         navigate(`/search/${word}`)
+    }
+
+    const unsubscribe = async () => {
+        await fetch(`http://localhost:8000/unsubscribe/${user?.email}/`);
+        setIsSubscribed(false)
+    }
+
+    const subscribeUser = async () => {
+        const response = await fetch('http://localhost:8000/subscribe/', {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({email: user?.email})
+        })
+        const data = await response.json()
+        if (data.error) {
+            alert(data.error)
+        } else {
+            alert("You've successfully subscribed to emails from WordHaven!");
+            setIsSubscribed(true)
+        }
     }
 
     return (
@@ -116,11 +153,24 @@ export default function Dashboard() {
                     )}
 
                     </div>
-                    <div className="tab-pane fade" id="v-pills-subscriptions" role="tabpanel" aria-labelledby="v-pills-subscriptions-tab">...</div>
+                    <div className="tab-pane fade" id="v-pills-subscriptions" role="tabpanel" aria-labelledby="v-pills-subscriptions-tab">
+                    {isSubscribed ? (
+                        <>
+                            <h4>You're subscribed to WordHaven's email alerts!</h4>
+                            <button data-toggle="modal" data-target="#exampleModal2" type="button" className="btn btn-outline-danger mt-2">Unsubscribe me</button>
+                        </>
+                    ) : (
+                        <>
+                            <h4>It looks like you're not subscribed to our daily "Word of the Day" emails. Would you like to?</h4>
+                            <button onClick={subscribeUser} type="button" className="btn btn-outline-primary mt-2">Subscribe me!</button>
+                        </>
+                    )}
+                    </div>
                     <div className="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
                 </div>
             </div>
         </div>
+
         <div className="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
@@ -136,6 +186,26 @@ export default function Dashboard() {
                 <div className="modal-footer">
                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button onClick={deleteFromFavorites} type="button" className="btn btn-primary" data-dismiss="modal">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>     
+
+        <div className="modal fade" id="exampleModal2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Unsubscribe</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div className="modal-body">
+                    Are you sure you want to unsubscribe from WordHaven's email alerts? You can always resubscribe.
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button onClick={unsubscribe} type="button" className="btn btn-primary" data-dismiss="modal">Yes</button>
                 </div>
                 </div>
             </div>
